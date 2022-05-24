@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+        .user {
+            background-color: #ddd;
+            padding: 1rem;
+            margin-bottom: 1rem;
+        }
+    </style>
+</head>
+
+<body>
+    <div id="app"></div>
+    <script>
+        function fetchData() {
+            fetch("https://reqres.in/api/users").then(response => {
+                if (!response.ok) {
+                    throw Error('Error');
+                }
+                return response.json();
+            }).then(data => {
+                console.log(data.data);
+                const html = data.data.map(user => {
+                    return `<div class='user'>
+                        <p><img src="${user.avatar}" alt='${user.first_name}'/></p>
+                        <p>Name: ${user.first_name}</p>
+                        <p>Email: ${user.email}</p>
+                     </div>`;
+                }).join("");
+                console.log(html)
+                document.querySelector('#app').insertAdjacentHTML('afterbegin', html);
+            }).catch(error => {
+                console.log(error);
+            });
+        }
+        fetchData();
+
+
+        function postData() {
+            fetch("https://reqres.in/api/users", {
+                method: 'POST', headers: {
+                    'Content-Type': 'application/json'
+                }, body: JSON.stringify( {
+                    name: "morpheus",
+                    job: "leader"
+                })
+            }).then(response => {
+                if (!response.ok) {
+                    throw Error('Error');
+                }
+                return response.json();
+            }).then(data => {
+                console.log(data);
+
+            }).catch(error => {
+                console.log(error);
+            });
+        }
+        postData();
+    </script>
+</body>
+
+</html>
